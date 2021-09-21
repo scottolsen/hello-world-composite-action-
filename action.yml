@@ -1,0 +1,33 @@
+name: 'Hello World'
+description: 'Greet someone'
+db:
+  image: postgres:11
+  ports: ['5432:5432']
+  env:
+    POSTGRES_USER: headmaster
+    POSTGRES_PASSWORD: postgres
+  options: >-
+    --health-cmd pg_isready
+    --health-interval 10s
+    --health-timeout 5s
+    --health-retries 5
+# runs:
+#   using: "composite"
+#   steps:
+#     - run: echo Hello ${{ inputs.who-to-greet }}.
+#       shell: bash
+#     - run: |
+#         sudo apt-get -yqq install libpq-dev
+#         yarn
+#         gem install bundler
+#         bundle install --jobs 4 --retry 3
+#         bundle exec rails db:setup
+#         bundle exec rspec
+#       env:
+#         PGHOST: localhost
+#         PGUSER: headmaster
+#         PGPASSWORD: postgres
+#         MBC_CRYPTO_PASSWORD: password
+#         MBC_CRYPTO_SALT: salt
+#         RAILS_ENV: test
+#       shell: bash
