@@ -5,17 +5,23 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
 runs:
   using: "composite"
   steps:
     - run: echo Hello ${{ inputs.who-to-greet }}.
       shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
-    - run: ${{ github.action_path }}/goodbye.sh
+    - run: |
+        sudo apt-get -yqq install libpq-dev
+        yarn
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+        bundle exec rails db:setup
+        bundle exec rspec
+      env:
+        PGHOST: localhost
+        PGUSER: headmaster
+        PGPASSWORD: postgres
+        MBC_CRYPTO_PASSWORD: password
+        MBC_CRYPTO_SALT: salt
+        RAILS_ENV: test
       shell: bash
